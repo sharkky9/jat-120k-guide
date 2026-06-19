@@ -1,0 +1,9 @@
+# Raw research build cache not needed for GitHub Pages
+data/
+__pycache__/
+*.pyc
+
+# Local browser verification artifacts
+docs/_verification-*.png
+
+# Keep generated public site and public research exports

@@ -2,7 +2,7 @@
 
 Generated: 2026-06-19T03:29:14+00:00
 
-Working folder note: the requested macOS project folder `/Users/christopherhandel/Documents/JAT 120` was not mounted here, so artifacts were built under `/home/codex/JAT 120`. The v1 artifacts were unavailable; this report does not claim a verified v1 diff.
+Working folder note: v1 artifacts were unavailable in this environment; this report does not claim a verified v1 diff.
 
 ## 1. V1 Comparison Status And V2 Methodology Notes
 
@@ -189,7 +189,7 @@ Conclusion most vulnerable to August GPX changes: late-race hard-surface percent
 
 Generated artifacts:
 
-Project-relative generated artifacts (base `/home/codex/JAT 120` in this environment):
+Project-relative generated artifacts:
 
 - `outputs/jat-120k-trail-conditions-dossier-v2.md`
 - `research/source-candidate-log-v2.csv`

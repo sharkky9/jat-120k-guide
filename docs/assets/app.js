@@ -17,8 +17,8 @@ function heroBrief() {
 
   $('briefGrid').innerHTML = [
     ['Modeled hard surface', `${m.hardKm} km`, 'Enough asphalt/paved/cobbled running to make cushion matter, but not enough to justify a road-first shoe.'],
-    ['Singletrack / alpine', `${m.singletrackKm} km`, 'The practical reason to prioritize grip, lockdown, toe protection and stability.'],
-    ['Context visuals only', `${Math.round(m.broadVisualPct + m.localContextPct)}%`, 'Broad official and adjacent-route context exists, but direct geotagged route visual proof is 0%.'],
+    ['Confirmed trail / alpine', `${m.singletrackKm} km`, 'Strict modeled count after inference caps; generic path and unknown terrain still need trail-shoe caution.'],
+    ['OSM match audit', m.matchedSegments, `${m.uniqueOsmWays} matched OSM ways feed the micro-segment model; bare tags stay capped as inference.`],
     ['Weak / low confidence', `${m.weakPct}%`, 'A conservative evidence score, not a terrain-danger score. Use it to spot where claims are most caveated.']
   ].map(([a, b, c]) => `<article class="brief-tile"><span>${a}</span><b>${b}</b><p>${c}</p></article>`).join('');
 }
@@ -116,14 +116,14 @@ function filteredKm() {
     if (state.filter === 'weak' && !DATA.weakKm.includes(k.km)) return false;
     if (!q) return true;
     const auditTerms = DATA.weakKm.includes(k.km) ? ' audit watch weak caveat' : '';
-    const hay = `km ${k.km} ${k.interval} ${k.surface} ${k.confidence} ${k.shoe} ${k.sourceIds.join(' ')} ${k.visualIds.join(' ')} ${auditTerms}`.toLowerCase();
+    const hay = `km ${k.km} ${k.interval} ${k.surface} ${k.confidence} ${k.shoe} ${k.poles} ${k.light} ${k.wetFallback} ${k.wetRisk} ${k.nightRisk} ${k.sourceIds.join(' ')} ${k.visualIds.join(' ')} ${auditTerms}`.toLowerCase();
     return hay.includes(q);
   });
 }
 
 function renderKmList() {
   const rows = filteredKm();
-  $('kmList').innerHTML = rows.map(k => `<article class="km-card ${k.km === state.activeKm ? 'active' : ''}" data-km="${k.km}"><div><div class="km-top"><b>km ${k.km}</b><small>${k.interval}</small></div><h3>${k.surface}</h3>${bars(k.mix)}</div><div><div class="mini-metrics"><div><small>+ / -</small><b>${Math.round(k.ascent)} / ${Math.round(k.descent)} m</b></div><div><small>Grade</small><b>${k.grade}</b></div><div><small>Hard</small><b>${Math.round(k.hard)}%</b></div><div><small>Trail</small><b>${Math.round(k.trail)}%</b></div></div><div class="km-evidence"><span class="pill ${DATA.weakKm.includes(k.km) ? 'warn' : 'good'}">${DATA.weakKm.includes(k.km) ? 'audit watch' : 'modeled'}</span><span class="pill">${k.confidence}</span>${k.visualIds.length ? '<span class="pill">visual context</span>' : ''}</div></div></article>`).join('');
+  $('kmList').innerHTML = rows.map(k => `<article class="km-card ${k.km === state.activeKm ? 'active' : ''}" data-km="${k.km}"><div><div class="km-top"><b>km ${k.km}</b><small>${k.interval}</small></div><h3>${k.surface}</h3>${bars(k.mix)}</div><div><div class="mini-metrics"><div><small>+ / -</small><b>${Math.round(k.ascent)} / ${Math.round(k.descent)} m</b></div><div><small>Hard</small><b>${Math.round(k.hard)}%</b></div><div><small>Trail</small><b>${Math.round(k.trail)}%</b></div><div><small>Inferred</small><b>${Math.round(k.unknownOrInferred)}%</b></div></div><div class="km-evidence"><span class="pill ${DATA.weakKm.includes(k.km) ? 'warn' : 'good'}">${DATA.weakKm.includes(k.km) ? 'audit watch' : 'modeled'}</span><span class="pill">${k.confidence}</span><span class="pill">wet ${k.wetRisk}</span>${k.visualIds.length ? '<span class="pill">visual context</span>' : ''}</div></div></article>`).join('');
   document.querySelectorAll('.km-card').forEach(card => card.addEventListener('click', () => { state.activeKm = Number(card.dataset.km); renderKmList(); renderDetail(); }));
   if (rows.length && !rows.find(r => r.km === state.activeKm)) { state.activeKm = rows[0].km; renderDetail(); }
 }
@@ -144,12 +144,21 @@ function visualLinks(ids) {
 function renderDetail() {
   const k = DATA.km.find(x => x.km === state.activeKm) || DATA.km[0];
   const segs = DATA.micro.filter(s => s.end > k.start && s.start < k.end);
-  $('detailPane').innerHTML = `<h3>km ${k.km}: ${k.surface}</h3><p>${k.shoe}</p>${bars(k.mix)}${tags(k.mix, 6)}<div class="mini-metrics"><div><small>Interval</small><b>${k.interval}</b></div><div><small>Ascent</small><b>${Math.round(k.ascent)} m</b></div><div><small>Descent</small><b>${Math.round(k.descent)} m</b></div><div><small>Evidence</small><b>${k.confidence}</b></div></div><p><b>Official route:</b> ${sourceLinks(k.officialIds || k.sourceIds)}<br><b>Surface model:</b> ${sourceLinks(k.mapIds || ['S003'])}<br><b>Evidence score:</b> ${Math.round(k.evidenceWeaknessScore || 0)} (${Math.round(k.unknownOrInferred || 0)}% inferred/unknown) ${k.visualIds.length ? `<br><b>Visual context:</b> ${visualLinks(k.visualIds)}` : ''}</p><div class="micro-list">${segs.map(s => `<div class="micro-row" style="border-left-color:${s.color}"><b>${s.id} • ${s.start.toFixed(3)}-${s.end.toFixed(3)} km • ${s.taxonomy}</b><small>${s.evidence} • map ${sourceLinks(s.mapIds || ['S003'])} • ${s.highway || 'path?'} ${s.surfaceTag ? '/ ' + s.surfaceTag : ''} • wet ${s.wet} • night ${s.night}</small><small>${s.shoe}</small></div>`).join('')}</div>`;
+  $('detailPane').innerHTML = `<h3>km ${k.km}: ${k.surface}</h3>${bars(k.mix)}${tags(k.mix, 6)}<div class="detail-ops"><p><b>Shoe:</b> ${k.shoe}</p><p><b>Poles:</b> ${k.poles}</p><p><b>Light:</b> ${k.light}</p><p><b>Wet fallback:</b> ${k.wetFallback}</p></div><div class="mini-metrics"><div><small>Interval</small><b>${k.interval}</b></div><div><small>Wet/night</small><b>${k.wetRisk} / ${k.nightRisk}</b></div><div><small>Evidence</small><b>${k.confidence}</b></div><div><small>Weak score</small><b>${Math.round(k.evidenceWeaknessScore || 0)}</b></div></div><div class="mini-metrics"><div><small>Ascent</small><b>${Math.round(k.ascent)} m</b></div><div><small>Descent</small><b>${Math.round(k.descent)} m</b></div><div><small>Raw grade</small><b>${k.grade}</b></div><div><small>Inferred</small><b>${Math.round(k.unknownOrInferred || 0)}%</b></div></div><p><b>Official route:</b> ${sourceLinks(k.officialIds || k.sourceIds)}<br><b>Surface model:</b> ${sourceLinks(k.mapIds || ['S003'])}<br><b>Elevation basis:</b> ${k.elevationBasis || 'raw GPX edge sum'} ${k.visualIds.length ? `<br><b>Visual context:</b> ${visualLinks(k.visualIds)}` : ''}</p><div class="micro-list">${segs.map(s => `<div class="micro-row" style="border-left-color:${s.color}"><b>${s.id} • ${s.start.toFixed(3)}-${s.end.toFixed(3)} km • ${s.taxonomy}</b><small>${s.evidence} • map ${sourceLinks(s.mapIds || ['S003'])} • ${s.highway || 'path?'} ${s.surfaceTag ? '/ ' + s.surfaceTag : ''} • wet ${s.wet} • night ${s.night}${s.inferred ? ' • inferred' : ''}</small><small>${s.shoe}</small></div>`).join('')}</div>`;
 }
 
 function markActive() { document.querySelectorAll('[data-interval]').forEach(n => n.classList.toggle('active', n.dataset.interval === state.interval)); }
-function renderSources() { $('sourceTable').innerHTML = DATA.sources.map(s => `<div class="source-row"><b>${s.source_id}</b><div><b>${s.title}</b><p>${s.source_class} • ${s.evidence_quality}</p><p>${s.key_claims}</p><p class="source-caveat">Caveat: ${s.caveats || 'Use with source-class limits.'}</p></div><a href="${s.url}" target="_blank" rel="noreferrer">Open source</a></div>`).join(''); }
-function renderGallery() { const imgs = DATA.visuals.filter(v => v.still_path).slice(0, 6); $('visualGallery').innerHTML = imgs.map(v => `<a class="visual-card" href="${v.url}" target="_blank" rel="noreferrer"><img src="assets/images/${v.still_path.split('/').pop()}" alt="${v.source_title}"><div><b>${v.visual_id}: ${v.source_title}</b><span>${v.confidence} • ${v.location_claim}<br>${v.caveats || 'Context only; not meter-level proof.'}</span></div></a>`).join(''); }
+function renderSources() {
+  $('sourceTable').innerHTML = DATA.sources.map(s => {
+    const meta = [s.evidence_class, s.source_class, s.evidence_quality, s.surface_relevance, s.record_status].filter(Boolean).join(' • ');
+    const archive = [s.raw_path, s.sha256 ? `sha ${s.sha256.slice(0, 12)}` : ''].filter(Boolean).join(' • ');
+    return `<div class="source-row"><b>${s.source_id}</b><div><b>${s.title}</b><p>${meta}</p><p>${s.key_claims}</p><p class="source-caveat">Caveat: ${s.caveats || 'Use with source-class limits.'}</p>${archive ? `<p class="source-path">${archive}</p>` : ''}</div><a href="${s.url}" target="_blank" rel="noreferrer">Open source</a></div>`;
+  }).join('');
+}
+function renderGallery() {
+  const imgs = DATA.visuals.filter(v => /\.jpe?g$/i.test(v.still_path || '')).slice(0, 6);
+  $('visualGallery').innerHTML = imgs.map(v => `<a class="visual-card" href="${v.url}" target="_blank" rel="noreferrer"><img src="assets/images/${v.still_path.split('/').pop()}" alt="${v.source_title}"><div><b>${v.visual_id}: ${v.source_title}</b><span>${v.evidence_role} • ${v.confidence}<br>${v.location_claim}<br>${v.caveats || 'Context only; not meter-level proof.'}</span></div></a>`).join('');
+}
 function bind() {
   $('kmSearch').addEventListener('input', e => { state.query = e.target.value; renderKmList(); });
   $('intervalSelect').addEventListener('change', e => { state.interval = e.target.value; renderKmList(); markActive(); });

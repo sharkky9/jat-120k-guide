@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JAT 120K Visual Evidence Atlas</title>
+  <meta name="description" content="Interactive visual evidence atlas for the Julian Alps Trail Run 120K course." />
+  <link rel="stylesheet" href="assets/visual-atlas.css" />
+</head>
+<body>
+<header class="atlas-topbar">
+  <a class="atlas-mark" href="index.html"><span>JAT</span><b>120K</b></a>
+  <nav>
+    <a href="#course">Course</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#audit">Audit</a>
+    <a href="#sources">Sources</a>
+    <a href="research/visual-evidence-index-v3.csv">CSV</a>
+  </nav>
+</header>
+<noscript><div class="empty atlas-error">This atlas needs JavaScript to render the interactive evidence catalog. Use the CSV links for the raw catalog.</div></noscript>
+<div id="atlasLive" class="sr-only" aria-live="polite"></div>
+<main>
+  <section class="controls" id="filters" aria-label="Atlas filters">
+    <label>
+      <span>Search</span>
+      <input id="searchInput" type="search" placeholder="Try Stol, Babji zob, Dovje, video, Commons..." />
+    </label>
+    <label>
+      <span>Gallery mode</span>
+      <select id="galleryMode"></select>
+    </label>
+    <label>
+      <span>Sort</span>
+      <select id="sortMode"></select>
+    </label>
+    <details id="advancedFilters" class="advanced-filters">
+      <summary>Advanced filters</summary>
+      <div class="advanced-filter-grid">
+        <label>
+          <span>Media class</span>
+          <select id="classFilter"></select>
+        </label>
+        <label>
+          <span>Evidence scope</span>
+          <select id="evidenceFilter"></select>
+        </label>
+        <label>
+          <span>Display status</span>
+          <select id="matchFilter"></select>
+        </label>
+        <label>
+          <span>Year/currentness</span>
+          <select id="currentnessFilter"></select>
+        </label>
+        <label>
+          <span>Access status</span>
+          <select id="accessFilter"></select>
+        </label>
+      </div>
+    </details>
+    <button id="copyViewButton" class="copy-view" type="button">Copy view</button>
+    <div id="presetBar" class="preset-bar" aria-label="Quick evidence presets"></div>
+  </section>
+
+  <section class="workbench" id="course">
+    <div class="map-pane">
+      <div class="map-head">
+        <div>
+          <p class="eyebrow">Visual evidence atlas</p>
+          <h1>Traverse the course by imagery.</h1>
+        </div>
+        <div><div id="summaryStats" class="summary-stats"></div><div id="mapLegend" class="map-legend" aria-label="Coverage color legend"></div></div>
+      </div>
+      <div id="routeMap" class="route-map" aria-label="Course route map"></div>
+      <div id="sectionStrip" class="section-strip"></div>
+    </div>
+    <aside id="sectionPanel" class="section-panel" tabindex="-1"></aside>
+  </section>
+
+  <section class="gallery-layout" id="gallery">
+    <div>
+      <div class="gallery-head">
+        <div>
+          <p class="eyebrow">Image records</p>
+          <h2 id="galleryTitle">Section gallery</h2>
+        </div>
+        <div id="galleryCount" class="gallery-count"></div>
+      </div>
+      <div id="starterPack" class="starter-pack"></div>
+      <div id="visualGrid" class="visual-grid"></div>
+      <div id="evidenceTable" class="evidence-table"></div>
+    </div>
+    <aside class="audit-pane" id="audit">
+      <h2>Evidence audit</h2>
+      <div id="auditMetrics" class="audit-metrics"></div>
+      <h3>Harvest provenance</h3>
+      <div id="provenancePanel" class="provenance-panel"></div>
+      <h3>Weakest sections</h3>
+      <div id="weakSections" class="weak-sections"></div>
+      <h3>Frame-review queue</h3>
+      <div id="frameReviewQueue" class="frame-review-queue"></div>
+      <h3>Known limits</h3>
+      <ul id="knownLimits"></ul>
+      <h3>Failed / blocked searches</h3>
+      <div id="failedQueries" class="failed-queries"></div>
+    </aside>
+  </section>
+
+  <section class="sources" id="sources">
+    <div class="source-head">
+      <div>
+        <p class="eyebrow">Source inventory</p>
+        <h2>Candidate sources, not just selected images.</h2>
+      </div>
+      <a class="button" href="research/visual-source-candidate-log-v3.csv">Open source CSV</a>
+    </div>
+    <div id="sourceList" class="source-list"></div>
+  </section>
+</main>
+<footer>
+  <span>Generated from v3 visual source candidates, harvested public assets, official route data, and the v2 course model.</span>
+  <a href="index.html">Back to race guide</a>
+</footer>
+<script src="assets/course-data.js"></script>
+<script src="assets/visual-atlas-data.js"></script>
+<script src="assets/visual-atlas.js"></script>
+</body>
+</html>

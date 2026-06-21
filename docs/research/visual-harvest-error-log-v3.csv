@@ -1,0 +1,30 @@
+error_id,error
+E001,dailymotion-derived-missing DV003 first-frame
+E002,dailymotion-derived-missing DV004 first-frame
+E003,page-fetch-fallback PG016: used r.jina-discovered Kranjska-Gora JAT event hero image via public image proxy
+E004,page-fetch-failed PG063 https://run247.com/race-guides/julian-alps-trail-run-utmb-route-live-tracking-how-to-enter: HTTP Error 403: Forbidden
+E005,page-fetch-fallback PG073: used cached UTMB Live public API finish livecam JPEG list
+E006,page-fetch-fallback LR013: used r.jina-discovered Kranjska-Gora Dovje-Jesenice cycling image via public image proxy
+E007,page-fetch-fallback LR014: used r.jina-discovered Kranjska-Gora Martuljek Waterfalls image via public image proxy
+E008,page-fetch-fallback LR015: used r.jina-discovered Kranjska-Gora Srednji Vrh images via public image proxy
+E009,page-fetch-fallback LR016: used r.jina-discovered Kranjska-Gora Srednji Vrh cycling image via public image proxy
+E010,page-fetch-fallback LR017: used r.jina-discovered Kranjska-Gora Dovska Rozca image via public image proxy
+E011,page-fetch-fallback LR023: used strict direct KRAJI Mojstrana-Sava Dolinka image URLs
+E012,page-fetch-fallback LR028: used strict direct KRAJI Dovje image URLs instead of parsed slow-page URLs
+E013,page-fetch-fallback LR029: used strict direct KRAJI Mojstrana image URLs instead of parsed slow-page URLs
+E014,page-fetch-fallback LR031: used strict direct KRAJI Gozd Martuljek image URLs instead of parsed slow-page URLs
+E015,page-fetch-failed LR036 https://www.wikiloc.com/cycling-trails/kranjska-gora-mojstrana-40290006: HTTP Error 403: Forbidden
+E016,page-fetch-fallback LR036: used r.jina-discovered Wikiloc Kranjska Gora-Mojstrana route-photo URLs via public image proxy
+E017,page-fetch-fallback LR042: used r.jina-discovered Kranjska-Gora Gozd Martuljek/Srednji Vrh images via public image proxy
+E018,page-fetch-failed LR073 https://www.wikiloc.com/hiking-trails/kupljenik-babji-zob-kupljenik-177191275: HTTP Error 403: Forbidden
+E019,page-fetch-fallback LR073: used r.jina-discovered Wikiloc Kupljenik-Babji zob route-photo URLs via public image proxy
+E020,page-fetch-failed LR083 https://www.wikiloc.com/hiking-trails/planina-pod-golico-betel-golica-13-6-20-50942860: HTTP Error 403: Forbidden
+E021,page-fetch-fallback LR083: used r.jina-discovered Wikiloc Planina pod Golico-Betel-Golica route-photo URLs via public image proxy
+E022,commons-category-fallback CM001: used curated Commons file list after API/category noise/rate-limit audit
+E023,commons-category-fallback CM005: used curated Commons file list after API/category noise/rate-limit audit
+E024,commons-category-fallback CM007: used curated Commons file list after API/category noise/rate-limit audit
+E025,commons-category-fallback CM009: used curated Commons file list after API/category noise/rate-limit audit
+E026,commons-category-fallback CM011: used curated Commons file list after API/category noise/rate-limit audit
+E027,commons-category-fallback CM012: used curated Commons file list after API/category noise/rate-limit audit
+E028,commons-category-fallback CM013: used curated Commons file list after API/category noise/rate-limit audit
+E029,commons-category-fallback CM014: used curated Commons file list after API/category noise/rate-limit audit
